@@ -1,133 +1,53 @@
-/* -----------------------------------------------
-/* How to use? : Check the GitHub README
-/* ----------------------------------------------- */
+// Function to handle form submission
+function submitForm(event) {
+    event.preventDefault(); // Prevent default form submission
 
-/* To load a config file (particles.json) you need to host this demo (MAMP/WAMP/local)... */
-/*
-particlesJS.load('particles-js', 'particles.json', function() {
-  console.log('particles.js loaded - callback');
-});
-*/
+    // Get form data
+    const fullname = document.getElementById('fullname').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const subject = document.getElementById('subject').value;
+    const message = document.getElementById('message').value;
 
-/* Otherwise just put the config content (json): */
+    // Print form data
+    console.log('Full Name:', fullname);
+    console.log('Email:', email);
+    console.log('Phone:', phone);
+    console.log('Subject:', subject);
+    console.log('Message:', message);
 
-particlesJS('particles-js',
-  
-  {
-    "particles": {
-      "number": {
-        "value": 80,
-        "density": {
-          "enable": true,
-          "value_area": 800
-        }
-      },
-      "color": {
-        "value": "#ffffff"
-      },
-      "shape": {
-        "type": "circle",
-        "stroke": {
-          "width": 0,
-          "color": "#000000"
-        },
-        "polygon": {
-          "nb_sides": 5
-        },
-        "image": {
-          "src": "img/github.svg",
-          "width": 100,
-          "height": 100
-        }
-      },
-      "opacity": {
-        "value": 0.5,
-        "random": false,
-        "anim": {
-          "enable": false,
-          "speed": 1,
-          "opacity_min": 0.1,
-          "sync": false
-        }
-      },
-      "size": {
-        "value": 5,
-        "random": true,
-        "anim": {
-          "enable": false,
-          "speed": 40,
-          "size_min": 0.1,
-          "sync": false
-        }
-      },
-      "line_linked": {
-        "enable": true,
-        "distance": 150,
-        "color": "#ffffff",
-        "opacity": 0.4,
-        "width": 1
-      },
-      "move": {
-        "enable": true,
-        "speed": 6,
-        "direction": "none",
-        "random": false,
-        "straight": false,
-        "out_mode": "out",
-        "attract": {
-          "enable": false,
-          "rotateX": 600,
-          "rotateY": 1200
-        }
-      }
-    },
-    "interactivity": {
-      "detect_on": "canvas",
-      "events": {
-        "onhover": {
-          "enable": true,
-          "mode": "repulse"
-        },
-        "onclick": {
-          "enable": true,
-          "mode": "push"
-        },
-        "resize": true
-      },
-      "modes": {
-        "grab": {
-          "distance": 400,
-          "line_linked": {
-            "opacity": 1
-          }
-        },
-        "bubble": {
-          "distance": 400,
-          "size": 40,
-          "duration": 2,
-          "opacity": 8,
-          "speed": 3
-        },
-        "repulse": {
-          "distance": 200
-        },
-        "push": {
-          "particles_nb": 4
-        },
-        "remove": {
-          "particles_nb": 2
-        }
-      }
-    },
-    "retina_detect": true,
-    "config_demo": {
-      "hide_card": false,
-      "background_color": "#b61924",
-      "background_image": "",
-      "background_position": "50% 50%",
-      "background_repeat": "no-repeat",
-      "background_size": "cover"
-    }
-  }
+    // add data after submitting the form
+    addData(fullname, email, phone, subject, message);
+}
 
-);
+// Function to add data
+function addData(fullname, email, phone, subject, message) {
+    fetch('http://localhost:8081/addData', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fullname, email, phone, subject, message }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Response:', data);
+            // Optionally, you can update the UI here with the response data
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+
+
+function fetchAllData() {
+    fetch('http://localhost:8081/getAllData')
+        .then(response => response.json())
+        .then(data => {
+            console.log('Data:', data);
+            // Process the retrieved data here, such as displaying it in the UI
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// Attach submitForm function to form submit event
+document.getElementById('contactForm').addEventListener('submit', submitForm);
